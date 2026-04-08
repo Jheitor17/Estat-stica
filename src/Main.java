@@ -76,3 +76,41 @@ public class Main {
             System.out.println();
         }
     }
+
+   private static void buscaManual(Scanner scanner) {
+        System.out.print("Tamanho do vetor: ");
+        int tamanho = scanner.nextInt();
+
+        int[] dados = GeradorDados.gerarAleatorio(tamanho);
+
+        BuscaEmArvore arvore = new BuscaEmArvore();
+        for (int valor : dados) arvore.inserir(valor);
+
+        Arrays.sort(dados);
+
+        System.out.print("Escolha um índice entre 0 e " + (tamanho - 1) + ": ");
+        int indice = scanner.nextInt();
+        int alvo = dados[indice];
+
+        System.out.println("\nBuscando pelo valor: " + alvo);
+
+        long inicioSeq = System.nanoTime();
+        int resSeq = BuscaSequencial.buscar(dados, alvo);
+        long fimSeq = System.nanoTime();
+        double tempoSeq = (fimSeq - inicioSeq) / 1000000.0;
+
+        long inicioBin = System.nanoTime();
+        int resBin = BuscaBinaria.buscar(dados, alvo);
+        long fimBin = System.nanoTime();
+        double tempoBin = (fimBin - inicioBin) / 1000000.0;
+
+        long inicioArv = System.nanoTime();
+        boolean resArv = arvore.buscar(alvo);
+        long fimArv = System.nanoTime();
+        double tempoArv = (fimArv - inicioArv) / 1000000.0;
+
+        System.out.printf("Busca Sequencial: índice %d | Tempo: %.4f ms%n", resSeq, tempoSeq);
+        System.out.printf("Busca Binária:    índice %d | Tempo: %.4f ms%n", resBin, tempoBin);
+        System.out.printf("Busca em Árvore:  %s | Tempo: %.4f ms%n", (resArv ? "encontrado" : "não encontrado"), tempoArv);
+    }
+}
